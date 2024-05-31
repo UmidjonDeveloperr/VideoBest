@@ -1,0 +1,46 @@
+﻿@page "/api/VideoMetadata"
+@using Shared.Models
+@using VideoBest.Web.Services.Foundations.VideoMetadatas
+@inject VideoMetadataService videoMetadataService
+
+<h3>Video Metadata</h3>
+
+@if (videoMetadataList == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Thumbnail</th>
+                <th>Created Date</th>
+                <th>Updated Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var video in videoMetadataList)
+            {
+                <tr>
+                    <td>@video.Title</td>
+                    <td>@video.Description</td>
+                    <td><img src="@video.Thubnail" alt="Thumbnail" style="width: 100px;" /></td>
+                    <td>@video.CreatedDate.ToString("g")</td>
+                    <td>@video.UpdatedDate.ToString("g")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private IEnumerable<VideoMetadata> videoMetadataList;
+
+    protected override async Task OnInitializedAsync()
+    {
+        videoMetadataList = await videoMetadataService.GetVideoMetadatasAsync();
+    }
+}
